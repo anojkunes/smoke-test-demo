@@ -1,13 +1,13 @@
 package com.ak.project
 
 import com.ak.project.user.UserServiceClient
+import groovy.util.logging.Slf4j
 import spock.lang.Specification
 
+@Slf4j
 abstract class BaseTest extends Specification {
     static final String ENV = System.getenv("ENV") != null ? System.getenv("ENV").toLowerCase() : "dev"
     static final String ACCESS_TOKEN = System.getenv("TOKEN") != null ? System.getenv("TOKEN").toLowerCase() : "dev"
-
-
 
     // List of all URLs to test
     static def urls = [
@@ -20,9 +20,12 @@ abstract class BaseTest extends Specification {
     static UserServiceClient userServiceClient
 
     def "setupSpec"() {
+        log.info("Tests running in ${ENV} environment");
+
         if (ENV == null || ENV.blank) {
             assert false: "Missing a command line ENV system variable"
         }
+
         if (urls[ENV] == null) {
             assert false: "Invalid command line ENV system variable. Valid values:${urls.keySet()}"
         }
